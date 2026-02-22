@@ -4,14 +4,17 @@ from google.genai import types
 import os
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
-load_dotenv()
-
 class ChatBot:
     def __init__(self):
         """Initialize the chatbot with API client"""
-        self.client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
-        self.model_id = "models/gemini-2.5-flash"  # Latest fast model
+        # Read API key from environment
+        api_key = os.environ.get("GEMINI_API_KEY")
+        
+        if not api_key:
+            raise ValueError("GEMINI_API_KEY environment variable not set!")
+        
+        self.client = genai.Client(api_key=api_key)
+        self.model_id = "models/gemini-2.5-flash"
         self.chat_history = []
     
     def send_message(self, user_message):
