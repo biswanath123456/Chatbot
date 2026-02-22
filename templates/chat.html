@@ -342,10 +342,16 @@
 </head>
 <body>
     <div class="chat-container">
-        <div class="chat-header">
+    <div class="chat-header">
+        <div>
             <h2>💬 AI Chatbot</h2>
-            <button class="reset-btn" onclick="resetChat()">🔄 Reset</button>
+            <small style="opacity: 0.8;">Welcome, {{ username }}!</small>
         </div>
+        <div style="display: flex; gap: 10px;">
+            <button class="reset-btn" onclick="resetChat()">🔄 Reset</button>
+            <button class="reset-btn" onclick="logout()">🚪 Logout</button>
+        </div>
+    </div>
         
         <div class="chat-messages" id="chatMessages">
             <div class="message bot">
@@ -370,6 +376,11 @@
     </div>
 
     <script>
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = '/logout';
+            }
+        }
         const sessionId = 'session_' + Date.now();
         let isTyping = false;
         
@@ -393,7 +404,7 @@
             const typingId = showTypingIndicator();
             
             try {
-                const response = await fetch('/chat', {
+                const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -514,7 +525,7 @@
             if (!confirm('Reset conversation? This will clear all messages.')) return;
             
             try {
-                await fetch('/reset', {
+                await fetch('/api/reset', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

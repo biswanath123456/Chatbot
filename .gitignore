@@ -40,7 +40,8 @@ desktop.ini
 
 # Database
 *.db
-*.sqlite3
+chatbot.db
+instance/
 
 # Pytest
 .pytest_cache/
@@ -49,6 +50,13 @@ desktop.ini
 # MyPy
 .mypy_cache/
 ```
+# Test files
+test_*.py
+setup_database.py
+check_database.py
+create_database.py
+init_db.py
+
 
 ## Your Project Structure Should Look Like:
 ```

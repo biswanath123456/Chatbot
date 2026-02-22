@@ -1,6 +1,9 @@
 google-genai
 python-dotenv
 flask
+flask-login
+flask-sqlalchemy
+werkzeug
 markdown
 pygments
 gunicorn
