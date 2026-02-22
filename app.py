@@ -23,6 +23,14 @@ login_manager.login_view = 'login'
 with app.app_context():
     db.create_all()
     print("✅ Database ready")
+    
+    # Auto-create admin user if it doesn't exist
+    if not User.query.filter_by(username='admin').first():
+        admin = User(username='admin', email='admin@example.com')
+        admin.set_password('admin123')
+        db.session.add(admin)
+        db.session.commit()
+        print("✅ Admin user auto-created (username: admin, password: admin123)")
 
 # Chatbot storage
 bots = {}
