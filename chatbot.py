@@ -2,16 +2,30 @@
 from google import genai
 from google.genai import types
 import os
-from dotenv import load_dotenv
+
+# Try to load .env file
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+    print("✅ .env file loaded")
+except ImportError:
+    print("⚠️ python-dotenv not installed")
+
+# Debug: Check if key is loaded
+api_key_test = os.environ.get("GEMINI_API_KEY")
+print(f"DEBUG: API key exists? {api_key_test is not None}")
+if api_key_test:
+    print(f"DEBUG: First 10 chars: {api_key_test[:10]}")
 
 class ChatBot:
     def __init__(self):
         """Initialize the chatbot with API client"""
-        # Read API key from environment
         api_key = os.environ.get("GEMINI_API_KEY")
         
         if not api_key:
             raise ValueError("GEMINI_API_KEY environment variable not set!")
+        
+        # print(f"✅ API Key loaded: {api_key[:15]}...")
         
         self.client = genai.Client(api_key=api_key)
         self.model_id = "models/gemini-2.5-flash"
