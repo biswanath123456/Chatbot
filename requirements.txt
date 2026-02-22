@@ -3,3 +3,4 @@ python-dotenv
 flask
 markdown
 pygments
+gunicorn
