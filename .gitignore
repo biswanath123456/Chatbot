@@ -1,0 +1,64 @@
+# Environment variables - IMPORTANT!
+.env
+.env.local
+
+# Virtual Environment
+env/
+venv/
+ENV/
+.venv
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Flask
+instance/
+.webassets-cache
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# Database
+*.db
+*.sqlite3
+
+# Pytest
+.pytest_cache/
+.coverage
+
+# MyPy
+.mypy_cache/
+```
+
+## Your Project Structure Should Look Like:
+```
+chatbot/
+├── .env              ← Your secret API key (NOT in git)
+├── .gitignore        ← Tells git to ignore .env (IN git)
+├── .env.example      ← Template for others (IN git)
+├── app.py
+├── chatbot.py
+├── requirements.txt
+├── README.md
+└── templates/
+    └── index.html
