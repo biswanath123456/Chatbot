@@ -1,7 +1,7 @@
 # app.py
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-from models import db, User
+from models import mongo, User
 from chatbot import ChatBot
 import markdown
 from markdown.extensions.codehilite import CodeHiliteExtension
@@ -9,29 +9,36 @@ from markdown.extensions.fenced_code import FencedCodeExtension
 import os
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///chatbot.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///chatbot.db'
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key')
+app.config['MONGO_URI'] = os.environ.get('MONGO_URI')
 
-# Initialize extensions
-db.init_app(app)
+# # Initialize extensions
+# db.init_app(app)
+# login_manager = LoginManager()
+# login_manager.init_app(app)
+# login_manager.login_view = 'login'
+
+# # Create tables if they don't exist
+# with app.app_context():
+#     db.create_all()
+#     print("✅ Database ready")
+    
+#     # Auto-create admin user if it doesn't exist
+#     if not User.query.filter_by(username='admin').first():
+#         admin = User(username='admin', email='admin@example.com')
+#         admin.set_password('admin123')
+#         db.session.add(admin)
+#         db.session.commit()
+#         print("✅ Admin user auto-created (username: admin, password: admin123)")
+mongo.init_app(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-# Create tables if they don't exist
-with app.app_context():
-    db.create_all()
-    print("✅ Database ready")
-    
-    # Auto-create admin user if it doesn't exist
-    if not User.query.filter_by(username='admin').first():
-        admin = User(username='admin', email='admin@example.com')
-        admin.set_password('admin123')
-        db.session.add(admin)
-        db.session.commit()
-        print("✅ Admin user auto-created (username: admin, password: admin123)")
-
+print("✅ MongoDB connected")
 # Chatbot storage
 bots = {}
 
@@ -64,11 +71,12 @@ def register():
             return jsonify({'success': False, 'error': 'Email already exists'}), 400
         
         # Create user
-        user = User(username=username, email=email)
-        user.set_password(password)
+        # user = User(username=username, email=email)
+        # user.set_password(password)
         
-        db.session.add(user)
-        db.session.commit()
+        # db.session.add(user)
+        # db.session.commit()
+        User.create_user(username, email, password)
         
         return jsonify({'success': True})
     
@@ -84,7 +92,8 @@ def login():
         username = data.get('username')
         password = data.get('password')
         
-        user = User.query.filter_by(username=username).first()
+        # user = User.query.filter_by(username=username).first()
+        user = User.get_by_username(username)
         
         if user and user.check_password(password):
             login_user(user)

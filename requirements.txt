@@ -2,7 +2,9 @@ google-genai
 python-dotenv
 flask
 flask-login
-flask-sqlalchemy
+# flask-sqlalchemy
+flask-pymongo
+pymongo[srv]
 werkzeug
 markdown
 pygments
